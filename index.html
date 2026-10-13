@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SARV | فرم ثبت ویزیت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{color-scheme:dark;--bg:#0b0d12;--panel:#12151c;--line:#2a2d36;--gold:#c9a96a;--gold2:#e6cf9b;--text:#ece8df;--mute:#8d8a82;--err:#e0746b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 600px at 50% -10%,#1b1810 0%,var(--bg) 60%);color:var(--text);font-family:'Vazirmatn',Tahoma,sans-serif;display:flex;justify-content:center;padding:32px 16px}
+.wrap{width:100%;max-width:640px}
+.brand{text-align:center;margin-bottom:28px}
+.brand .logo{font-family:'Cormorant Garamond',Georgia,serif;font-size:54px;letter-spacing:.35em;color:var(--gold2);margin:0;padding-left:.35em;direction:ltr}
+.brand .fa{color:var(--gold);letter-spacing:.2em;font-size:14px;font-weight:300;margin-top:2px}
+.rule{height:1px;margin:18px auto 0;width:140px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.card{background:linear-gradient(180deg,#151822,var(--panel));border:1px solid var(--line);border-radius:14px;padding:28px;box-shadow:0 30px 60px -30px #000}
+h2{font-size:17px;font-weight:500;margin:0 0 22px;color:var(--gold2)}
+.f{margin-bottom:18px}
+label{display:block;font-size:13px;color:var(--mute);margin-bottom:7px}
+input,select{width:100%;background:#0d1016;border:1px solid var(--line);border-radius:9px;color:var(--text);font:inherit;font-size:15px;padding:12px 14px;outline:none;transition:.2s}
+input:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 3px #c9a96a22}
+input.bad{border-color:var(--err)}
+.err{color:var(--err);font-size:12px;margin-top:5px;min-height:0}
+#phone{direction:ltr;text-align:right;letter-spacing:.08em}
+.actions{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+button{flex:1;min-width:160px;font:inherit;font-weight:500;font-size:15px;padding:13px 18px;border-radius:9px;cursor:pointer;transition:.2s}
+.b1{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1508;border:0}
+.b2{background:transparent;color:var(--gold2);border:1px solid var(--gold)}
+button:hover{transform:translateY(-1px);filter:brightness(1.08)}
+button:disabled{opacity:.55;cursor:wait}
+.toast{margin-top:16px;text-align:center;font-size:13px;color:var(--gold2);min-height:20px}
+/* hidden PDF sheet */
+#sheet{position:fixed;left:-10000px;top:0;width:794px;height:1123px;background:#faf7f0;color:#1b1a17;font-family:'Vazirmatn',Tahoma,sans-serif;direction:rtl;padding:64px 70px;display:flex;flex-direction:column}
+#sheet .top{text-align:center;border-bottom:2px solid #c9a96a;padding-bottom:26px}
+#sheet .lg{font-family:'Cormorant Garamond',Georgia,serif;font-size:56px;letter-spacing:.35em;padding-left:.35em;direction:ltr;color:#1b1a17}
+#sheet .sub{color:#9a7b3c;font-size:14px;letter-spacing:.25em;margin-top:2px}
+#sheet h1{font-size:24px;font-weight:700;text-align:center;margin:40px 0 30px}
+#sheet .row{display:flex;border-bottom:1px solid #e3dccb;padding:18px 6px}
+#sheet .row b{width:170px;color:#9a7b3c;font-weight:500;font-size:15px}
+#sheet .row span{flex:1;font-size:17px;font-weight:500;line-height:1.9}
+#sheet .foot{margin-top:auto;text-align:center;color:#8a8574;font-size:12px;border-top:1px solid #e3dccb;padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <h1 class="logo">SARV</h1>
+    <div class="fa">سرو</div>
+    <div class="rule"></div>
+  </div>
+
+  <div class="card">
+    <h2>فرم ثبت اطلاعات ویزیت</h2>
+
+    <div class="f"><label for="visitor">نام ویزیتور</label><input id="visitor" autocomplete="off"><div class="err" data-for="visitor"></div></div>
+    <div class="f"><label for="store">نام فروشگاه</label><input id="store" autocomplete="off"><div class="err" data-for="store"></div></div>
+    <div class="f"><label for="addr">آدرس فروشگاه</label><input id="addr" autocomplete="off"><div class="err" data-for="addr"></div></div>
+    <div class="f"><label for="seller">نام فروشنده</label><input id="seller" autocomplete="off"><div class="err" data-for="seller"></div></div>
+    <div class="f"><label for="phone">شماره همراه فروشنده</label><input id="phone" inputmode="numeric" maxlength="11" placeholder="09123456789" autocomplete="off"><div class="err" data-for="phone"></div></div>
+    <div class="f">
+      <label for="type">نوع فروشگاه</label>
+      <select id="type">
+        <option value="">انتخاب کنید...</option>
+        <option>سوپر محلی</option>
+        <option>سوپرمارکت بزرگ</option>
+        <option>عطاری</option>
+        <option>غیره</option>
+      </select>
+      <div class="err" data-for="type"></div>
+    </div>
+    <div class="f" id="otherBox" style="display:none"><label for="other">نوع فروشگاه را بنویسید</label><input id="other" autocomplete="off"><div class="err" data-for="other"></div></div>
+
+    <div class="actions">
+      <button class="b1" id="copyBtn">کپی اطلاعات</button>
+      <button class="b2" id="pdfBtn">دانلود PDF</button>
+    </div>
+    <div class="toast" id="toast"></div>
+  </div>
+</div>
+
+<div id="sheet" aria-hidden="true">
+  <div class="top"><div class="lg">SARV</div><div class="sub">سرو</div></div>
+  <h1>فرم ثبت اطلاعات ویزیت</h1>
+  <div id="rows"></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var fa2en=function(s){return s.replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)}).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)})};
+  var toastT;
+  function toast(m){var t=$('toast');t.textContent=m;clearTimeout(toastT);toastT=setTimeout(function(){t.textContent=''},3500)}
+
+  $('phone').addEventListener('input',function(){this.value=fa2en(this.value).replace(/\D/g,'').slice(0,11)});
+  $('type').addEventListener('change',function(){$('otherBox').style.display=this.value==='غیره'?'block':'none'});
+
+  function setErr(id,msg){
+    var e=document.querySelector('[data-for="'+id+'"]'),i=$(id);
+    if(e)e.textContent=msg||'';
+    if(i)i.classList.toggle('bad',!!msg);
+  }
+
+  function collect(){
+    var d={
+      visitor:$('visitor').value.trim(),store:$('store').value.trim(),addr:$('addr').value.trim(),
+      seller:$('seller').value.trim(),phone:fa2en($('phone').value.trim()),type:$('type').value,other:$('other').value.trim()
+    };
+    var ok=true,need=function(k,m){if(!d[k]){setErr(k,m||'این فیلد الزامی است');ok=false}else setErr(k,'')};
+    need('visitor');need('store');need('addr');need('seller');need('type','نوع فروشگاه را انتخاب کنید');
+    if(!/^09\d{9}$/.test(d.phone)){setErr('phone','شماره باید ۱۱ رقم باشد و با ۰۹ شروع شود');ok=false}else setErr('phone','');
+    if(d.type==='غیره')need('other');else setErr('other','');
+    d.typeFinal=d.type==='غیره'?d.other:d.type;
+    return ok?d:null;
+  }
+
+  var dateStr=function(){try{return new Date().toLocaleDateString('fa-IR-u-ca-persian',{year:'numeric',month:'long',day:'numeric'})}catch(e){return new Date().toLocaleDateString()}};
+
+  var LABELS=[['visitor','ویزیتور'],['store','نام فروشگاه'],['addr','آدرس فروشگاه'],['seller','نام فروشنده'],['phone','شماره همراه فروشنده'],['typeFinal','نوع فروشگاه']];
+
+  function asText(d){
+    return 'SARV | سرو\nتاریخ: '+dateStr()+'\n\n'+LABELS.map(function(l){return l[1]+': '+d[l[0]]}).join('\n');
+  }
+
+  $('copyBtn').addEventListener('click',function(){
+    var d=collect();if(!d)return;
+    var txt=asText(d);
+    function fb(){
+      var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';
+      document.body.appendChild(ta);ta.select();
+      var ok=false;try{ok=document.execCommand('copy')}catch(e){}
+      document.body.removeChild(ta);
+      toast(ok?'اطلاعات کپی شد ✓':'کپی انجام نشد، لطفاً دستی کپی کنید');
+    }
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){toast('اطلاعات کپی شد ✓')},fb);
+    }else fb();
+  });
+
+  $('pdfBtn').addEventListener('click',async function(){
+    var d=collect();if(!d)return;
+    var btn=this;btn.disabled=true;toast('در حال ساخت PDF...');
+    try{
+      var rows=$('rows');rows.textContent='';
+      LABELS.forEach(function(l){
+        var r=document.createElement('div');r.className='row';
+        var b=document.createElement('b');b.textContent=l[1];
+        var s=document.createElement('span');s.textContent=d[l[0]];
+        if(l[0]==='phone'){s.style.direction='ltr';s.style.textAlign='right'}
+        r.appendChild(b);r.appendChild(s);rows.appendChild(r);
+      });
+      $('foot').textContent='تاریخ ثبت: '+dateStr()+'  •  SARV Premium Persian Spices';
+      if(document.fonts&&document.fonts.ready)await document.fonts.ready;
+      var canvas=await html2canvas($('sheet'),{scale:2,backgroundColor:'#faf7f0',useCORS:true});
+      var pdf=new window.jspdf.jsPDF({orientation:'p',unit:'mm',format:'a4'});
+      pdf.addImage(canvas.toDataURL('image/jpeg',0.95),'JPEG',0,0,210,297);
+      var blob=pdf.output('blob');
+      var name='SARV-visit-'+new Date().toISOString().slice(0,10)+'.pdf';
+      var dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(e){}
+      if(dl){
+        await dl.save({filename:name,data:blob});
+        toast('PDF ذخیره شد ✓');
+      }else{
+        var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
+        document.body.appendChild(a);a.click();document.body.removeChild(a);
+        toast('PDF دانلود شد ✓');
+      }
+    }catch(e){
+      toast(e&&e.code==='declined'?'دانلود لغو شد':'ساخت PDF با خطا مواجه شد');
+    }finally{btn.disabled=false}
+  });
+})();
+</script>
+</body>
+</html>
